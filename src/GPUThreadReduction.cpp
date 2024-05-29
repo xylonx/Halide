@@ -93,7 +93,7 @@ private:
         const Stmt body = mutate(op->body);
 
         Stmt stmt = body;
-        stmt = IfThenElse::make((thread_var % (2 * pow(2, log_step_var))) == 0, stmt);
+        stmt = IfThenElse::make((thread_var % (2 * (1 << log_step_var))) == 0, stmt);
         stmt = Block::make({
             // assign values from
             stmt,
@@ -113,6 +113,8 @@ private:
                              Provide::make(reduce_provider_name, {Call::make(Int(32), intermediate_buffer_name, {}, Call::CallType::Halide)}, {block_var}, const_true())),
 
         });
+
+        inner_reduction = false;
 
         return stmt;
     }
@@ -149,7 +151,7 @@ private:
             args.reserve(op->args.size());
             for (const auto &arg : op->args) {
                 // if arg contains thread_idx
-                args.emplace_back(Cast::make(Int(32), thread_var + pow(2, log_step_var)));
+                args.emplace_back(Cast::make(Int(32), thread_var + (1 << log_step_var)));
             }
 
             return Call::make(op->type, intermediate_buffer_name, args, op->call_type, op->func, op->value_index, op->image, op->param);

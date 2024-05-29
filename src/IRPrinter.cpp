@@ -296,7 +296,6 @@ ostream &operator<<(ostream &stream, const AssociativeOp &op) {
 ostream &operator<<(ostream &out, const ForType &type) {
     switch (type) {
     case ForType::Serial:
-    case ForType::GPUThreadReduction:
         out << "for";
         break;
     case ForType::Parallel:
@@ -319,6 +318,9 @@ ostream &operator<<(ostream &out, const ForType &type) {
         break;
     case ForType::GPULane:
         out << "gpu_lane";
+        break;
+    case ForType::GPUThreadReduction:
+        out << "gpu_thread_reduction";
         break;
     }
     return out;

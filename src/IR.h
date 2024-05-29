@@ -990,6 +990,19 @@ struct VectorReduce : public ExprNode<VectorReduce> {
     static const IRNodeType _node_type = IRNodeType::VectorReduce;
 };
 
+/// auto Op = [](const Expr a, const Expr b) { return a + b; }
+/// result() = accumulate(input(r), init, Op)
+// struct Accumulate : public ExprNode<Accumulate> {
+//     static Expr make();
+//
+//     Expr elements, initial;
+//     std::function<Expr(const Expr, const Expr)> accumulator;
+//
+//     static Expr make(Expr ele, Expr initial, std::function<Expr(const Expr, const Expr)> accumulator);
+//
+//     static const IRNodeType _node_type = IRNodeType::Accumulate;
+// };
+
 }  // namespace Internal
 }  // namespace Halide
 
