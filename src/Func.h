@@ -404,7 +404,8 @@ public:
     Stage specialize(const Expr &condition);
     void specialize_fail(const std::string &message);
 
-    Stage &gpu_thread_reduction(const VarOrRVar &thread_x, DeviceAPI device_api = DeviceAPI::Default_GPU);
+    Stage &gpu_single_block(DeviceAPI device_api = DeviceAPI::Default_GPU);
+    Stage &gpu_threads_reduction(const VarOrRVar &thread_x, DeviceAPI device_api = DeviceAPI::Default_GPU);
 
     Stage &gpu_threads(const VarOrRVar &thread_x, DeviceAPI device_api = DeviceAPI::Default_GPU);
     Stage &gpu_threads(const VarOrRVar &thread_x, const VarOrRVar &thread_y, DeviceAPI device_api = DeviceAPI::Default_GPU);

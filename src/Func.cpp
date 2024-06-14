@@ -2020,9 +2020,16 @@ Stage &Stage::reorder(const std::vector<VarOrRVar> &vars) {
     return *this;
 }
 
-Stage &Stage::gpu_thread_reduction(const VarOrRVar &thread_x, DeviceAPI device_api) {
+Stage &Stage::gpu_threads_reduction(const VarOrRVar &thread_x, DeviceAPI device_api) {
     set_dim_device_api(thread_x, device_api);
     set_dim_type(thread_x, ForType::GPUThreadReduction);
+    return *this;
+}
+
+Stage &Stage::gpu_single_block(DeviceAPI device_api) {
+    Var single_block;
+    split(Var::outermost(), Var::outermost(), single_block, 1);
+    gpu_blocks(single_block, device_api);
     return *this;
 }
 
