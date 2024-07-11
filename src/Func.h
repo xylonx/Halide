@@ -7,12 +7,14 @@
  */
 
 #include "Argument.h"
+#include "DeviceAPI.h"
 #include "Expr.h"
 #include "JITModule.h"
 #include "Module.h"
 #include "Param.h"
 #include "Pipeline.h"
 #include "RDom.h"
+#include "Schedule.h"
 #include "Target.h"
 #include "Tuple.h"
 #include "Var.h"
@@ -338,7 +340,6 @@ public:
     /** Scheduling calls that control how the domain of this stage is
      * traversed. See the documentation for Func for the meanings. */
     // @{
-
     Stage &split(const VarOrRVar &old, const VarOrRVar &outer, const VarOrRVar &inner, const Expr &factor, TailStrategy tail = TailStrategy::Auto);
     Stage &fuse(const VarOrRVar &inner, const VarOrRVar &outer, const VarOrRVar &fused);
     Stage &serial(const VarOrRVar &var);
@@ -403,6 +404,9 @@ public:
     Stage specialize(const Expr &condition);
     void specialize_fail(const std::string &message);
 
+    Stage &gpu_single_block(DeviceAPI device_api = DeviceAPI::Default_GPU);
+    Stage &gpu_threads_reduction(const VarOrRVar &thread_x, DeviceAPI device_api = DeviceAPI::Default_GPU);
+
     Stage &gpu_threads(const VarOrRVar &thread_x, DeviceAPI device_api = DeviceAPI::Default_GPU);
     Stage &gpu_threads(const VarOrRVar &thread_x, const VarOrRVar &thread_y, DeviceAPI device_api = DeviceAPI::Default_GPU);
     Stage &gpu_threads(const VarOrRVar &thread_x, const VarOrRVar &thread_y, const VarOrRVar &thread_z, DeviceAPI device_api = DeviceAPI::Default_GPU);
@@ -454,6 +458,11 @@ public:
                     const Expr &x_size, const Expr &y_size, const Expr &z_size,
                     TailStrategy tail = TailStrategy::Auto,
                     DeviceAPI device_api = DeviceAPI::Default_GPU);
+
+    Stage &gpu_split(const VarOrRVar &old, const VarOrRVar &block, const VarOrRVar &thread,
+                     const Expr &factor, TailStrategy tail = TailStrategy::Auto, DeviceAPI device_api = DeviceAPI::Default_GPU);
+    Func gpu_rfactor(const RVar &r, const Var &block, const Var &thread, const Expr &factor,
+                     TailStrategy tail = TailStrategy::Auto, const DeviceAPI &device_api = DeviceAPI::Default_GPU);
 
     Stage &allow_race_conditions();
     Stage &atomic(bool override_associativity_test = false);

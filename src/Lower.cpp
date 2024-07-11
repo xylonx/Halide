@@ -33,6 +33,7 @@
 #include "Function.h"
 #include "FuseGPUThreadLoops.h"
 #include "FuzzFloatStores.h"
+#include "GPUThreadReduction.h"
 #include "HexagonOffload.h"
 #include "IRMutator.h"
 #include "IROperator.h"
@@ -281,6 +282,10 @@ void lower_impl(const vector<Function> &output_funcs,
     log("Lowering after destructuring tuple-valued realizations:", s);
 
     if (t.has_gpu_feature()) {
+        debug(1) << "Rewriting reduction per gpu thread...\n";
+        s = gpu_thread_reduction(s);
+        log("Lowering after rewriting reduction per gpu thread:", s);
+
         debug(1) << "Canonicalizing GPU var names...\n";
         s = canonicalize_gpu_vars(s);
         log("Lowering after canonicalizing GPU var names:", s);

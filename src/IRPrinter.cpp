@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 
+#include "Expr.h"
 #include "IRPrinter.h"
 
 #include "AssociativeOpsTable.h"
@@ -317,6 +318,9 @@ ostream &operator<<(ostream &out, const ForType &type) {
         break;
     case ForType::GPULane:
         out << "gpu_lane";
+        break;
+    case ForType::GPUThreadReduction:
+        out << "gpu_thread_reduction";
         break;
     }
     return out;
